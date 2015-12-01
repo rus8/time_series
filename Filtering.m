@@ -56,32 +56,33 @@ plot(ax6,Dates,Data(:,2),Dates,PriceRloess)
 title(['Robust local regression (2nd degree polynomial model) with span = ',  num2str(span)])
 legend('Original','Filtered','Location','northwest')
 
-
-figure('NumberTitle', 'off', 'Name', 'Filtering with "smoothts" function from Financial Toolbox')
-
-wsize = 9; %Window size
-stdev = 2;%0.65; %Standart deviation for Gaussian filter
-
-%Box smoothing method
-method = 'b';
-FilteredData = smoothts(Data(:,2),method,wsize);
-ax7 = subplot(3,1,1);
-plot(ax7,Dates,Data(:,2),Dates,FilteredData)
-title(['Box smoothing method with window size = ',  num2str(wsize)])
-legend('Original','Filtered','Location','northwest')
-
-%Gaussian smoothing method
-method = 'g';
-FilteredData = smoothts(Data(:,2),method,wsize,stdev);
-ax8 = subplot(3,1,2);
-plot(ax8,Dates,Data(:,2),Dates,FilteredData)
-title(['Gaussian smoothing method with window size = ',  num2str(wsize), ' and standart deviation = ', num2str(stdev)])
-legend('Original','Filtered','Location','northwest')
-
-%Exponential smoothing method
-method = 'e';
-FilteredData = smoothts(Data(:,2),method,wsize);
-ax9 = subplot(3,1,3);
-plot(ax9,Dates,Data(:,2),Dates,FilteredData)
-title(['Exponential smoothing method with window size = ',  num2str(wsize)])
-legend('Original','Filtered','Location','northwest')
+% Function "smoothts" has bad perfomance in our case
+%
+% figure('NumberTitle', 'off', 'Name', 'Filtering with "smoothts" function from Financial Toolbox')
+% 
+% wsize = 9; %Window size
+% stdev = 2;%0.65; %Standart deviation for Gaussian filter
+% 
+% %Box smoothing method
+% method = 'b';
+% FilteredData = smoothts(Data(:,2),method,wsize);
+% ax7 = subplot(3,1,1);
+% plot(ax7,Dates,Data(:,2),Dates,FilteredData)
+% title(['Box smoothing method with window size = ',  num2str(wsize)])
+% legend('Original','Filtered','Location','northwest')
+% 
+% %Gaussian smoothing method
+% method = 'g';
+% FilteredData = smoothts(Data(:,2),method,wsize,stdev);
+% ax8 = subplot(3,1,2);
+% plot(ax8,Dates,Data(:,2),Dates,FilteredData)
+% title(['Gaussian smoothing method with window size = ',  num2str(wsize), ' and standart deviation = ', num2str(stdev)])
+% legend('Original','Filtered','Location','northwest')
+% 
+% %Exponential smoothing method
+% method = 'e';
+% FilteredData = smoothts(Data(:,2),method,wsize);
+% ax9 = subplot(3,1,3);
+% plot(ax9,Dates,Data(:,2),Dates,FilteredData)
+% title(['Exponential smoothing method with window size = ',  num2str(wsize)])
+% legend('Original','Filtered','Location','northwest')
