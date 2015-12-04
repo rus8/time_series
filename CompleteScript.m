@@ -31,14 +31,14 @@ span = 500; %Defines how many neighboring data samples are used to filter each s
 Price = smooth(Data(:,2),span,method);
 % Special case for "sgolay" method (include "degree" parameter)
 % degree = 3;
-% PriceSgolay = smooth(Data(:,2),span,'sgolay',degree);
+% Price = smooth(Data(:,2),span,'sgolay',degree);
 figure('NumberTitle', 'off', 'Name', 'Filtering with "smooth" function');
 plot(Data(:,1),Data(:,2),Data(:,1),Price);
 legend('Original data','Filtered data','Location','northwest');
 
 % Forecasting with Neural Network
 DeltaPrice = (Price(2:end)-Price(1:end-1))';
-basis = 0.5; %Part of origanal data that would be used for prediction (<1)
+basis = 0.85; %Part of origanal data that would be used for prediction (<1)
 [n,DataSize]=size(DeltaPrice);
 BasisSize = round(basis*DataSize); %Number of samples used for prediction
 HorizonSize = DataSize - BasisSize; %Number of samples that are predicted
@@ -81,11 +81,18 @@ DeltaPriceForecast = cell2mat(yc2);
 DeltaPriceForecast = smooth(DeltaPriceForecast,round(HorizonSize/8),'rlowess')';
 PriceForecast(1) = Price(BasisSize) + DeltaPriceForecast(1);
 for i=2:HorizonSize
-   PriceForecast(i)= PriceForecast(i-1) + DeltaPriceForecast(1);
+   PriceForecast(i) = PriceForecast(i-1) + DeltaPriceForecast(i);
 end
+PriceBasis(1) = Price(1);
+PriceBasis(2) = Price(1) + NNAprox(1);
+for i=2:BasisSize
+    PriceBasis(i+1) = PriceBasis(i) + NNAprox(i);
+end;
 
 figure('NumberTitle', 'off', 'Name', 'Data prediction');
 Dates = Data(:,1);
-plot(Data(:,1),Data(:,2),Dates(end-HorizonSize+1:end),PriceForecast);
-legend('Original data','Forecasted data','Location','northwest');
+plot(Data(:,1),Data(:,2),Dates(1:BasisSize+1),PriceBasis)
+hold on;
+plot(Dates(end-HorizonSize+1:end),PriceForecast,'Color','g');
+legend('Original data','Approximated Data','Forecasted data','Location','northwest');
 
